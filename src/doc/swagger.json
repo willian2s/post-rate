@@ -9,9 +9,14 @@
     "version": "1.0.0"
   },
   "servers": [{
-    "url": "http://localhost:5000/v1",
-    "description": "Test API"
-  }],
+      "url": "https://post-rating.herokuapp.com/v1",
+      "description": "Production API"
+    },
+    {
+      "url": "http://localhost:5000/v1",
+      "description": "Test API"
+    }
+  ],
   "paths": {
     "/post": {
       "post": {
