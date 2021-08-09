@@ -1,6 +1,6 @@
 # Post Rate
 
-Application built to create and evaluate posts, it was atracez deployed through Heroku. To access the API [Clique Aqui](https://post-rating.herokuapp.com/)
+Application built to create and evaluate posts, it was atracez deployed through Heroku. To access the API [Click here](https://post-rating.herokuapp.com/) and [DOC](https://post-rating.herokuapp.com/v1/doc/)
 
 ## :rocket: How to test
 - Clone the repository: `git clone https://github.com/willian2s/post-rate.git`
