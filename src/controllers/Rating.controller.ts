@@ -25,14 +25,13 @@ export const createRating = async (
     const errors = await validate(ratingObj);
     if (errors.length === 0) {
       const response = await Repository.save(ratingObj);
-      return res.status(200).json({
-        statusCode: 200,
-        data: response,
-      });
+      return res.status(200).json(response);
     }
     return res.status(400).json(errors.map(err => err.constraints));
   } catch (error) {
     logger.error(error);
-    return res.status(400).send({ error: error.detail });
+    if (error.code === '23505')
+      res.status(400).json({ message: 'User has already rated this post!' });
+    return res.status(400).send(error);
   }
 };

@@ -24,14 +24,13 @@ export const createPost = async (
     const errors = await validate(post);
     if (errors.length === 0) {
       const response = await Repository.save(post);
-      return res.status(200).json({
-        statusCode: 200,
-        data: response,
-      });
+      return res.status(200).json(response);
     }
     return res.status(400).json(errors.map(err => err.constraints));
   } catch (error) {
     logger.error(error);
+    if (error.code === '23505')
+      res.status(400).json({ message: 'Post already exists.' });
     return res.status(400).send(error);
   }
 };
@@ -54,14 +53,13 @@ export const updatePost = async (
     if (errors.length === 0) {
       await Repository.update(id, { ...post });
       const response = await Repository.findOne(id);
-      return res.status(200).json({
-        statusCode: 200,
-        data: response,
-      });
+      return res.status(200).json(response);
     }
     return res.status(400).json(errors.map(err => err.constraints));
   } catch (error) {
     logger.error(error);
+    if (error.code === '23505')
+      res.status(400).json({ message: 'Post already exists.' });
     return res.status(400).send(error);
   }
 };
@@ -79,12 +77,11 @@ export const deletePost = async (
       RatingRepository.delete(id);
     });
     await Repository.delete(id);
-    return res.status(200).json({
-      statusCode: 200,
-      data: 'Post successfully deleted',
-    });
+    return res.status(200).json('Post successfully deleted');
   } catch (error) {
     logger.error(error);
+    if (error.code === '22P02')
+      res.status(400).json({ message: 'Post not exists.' });
     return res.status(400).send(error);
   }
 };
@@ -105,18 +102,17 @@ export const getPost = async (
       for (let i = 0; i < rating.length; i++) {
         sum += rating[i];
       }
-      avaregeRating = (sum / rating.length).toFixed(2);
+      avaregeRating = (sum / rating.length).toFixed(2) || 0;
     }
 
     return res.status(200).json({
-      statusCode: 200,
-      data: {
-        ...response,
-        avaregeRating,
-      },
+      ...response,
+      avaregeRating,
     });
   } catch (error) {
     logger.error(error);
+    if (error.code === '22P02')
+      res.status(400).json({ message: 'Post not exists.' });
     return res.status(400).send(error);
   }
 };

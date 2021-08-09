@@ -1,0 +1,370 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Post API",
+    "description": "API with the purpose of creating posts and rating",
+    "contact": {
+      "email": "silva.williansantos@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [{
+    "url": "http://localhost:5000/v1",
+    "description": "Test API"
+  }],
+  "paths": {
+    "/post": {
+      "post": {
+        "summary": "Create post",
+        "description": "This route is responsible for creating a post",
+        "tags": ["Posts"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              },
+              "examples": {
+                "post": {
+                  "value": {
+                    "title": "What's JavaScript?",
+                    "body": "JavaScript is the Programming Language for the Web"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Error Validator": {
+                    "value": [{
+                        "isString": "title must be a string"
+                      },
+                      {
+                        "isNotEmpty": "body should not be empty",
+                        "isString": "body must be a string"
+                      }
+                    ]
+                  },
+                  "Exists": {
+                    "value": {
+                      "message": "Post already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/post/{id}": {
+      "get": {
+        "summary": "Get post by id",
+        "description": "This route is responsible for retrieving a post with rating",
+        "tags": ["Posts"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Post Id",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/PostWithRating"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Exists": {
+                    "value": {
+                      "message": "Post not exists."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update post by id",
+        "description": "This route is responsible for updating a post",
+        "tags": ["Posts"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Post Id",
+          "required": true
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              },
+              "examples": {
+                "post": {
+                  "value": {
+                    "title": "What's JavaScript?",
+                    "body": "JavaScript is the Programming Language for the Web"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Error Validator": {
+                    "value": [{
+                        "isString": "title must be a string"
+                      },
+                      {
+                        "isNotEmpty": "body should not be empty",
+                        "isString": "body must be a string"
+                      }
+                    ]
+                  },
+                  "Exists": {
+                    "value": {
+                      "message": "Post already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete post by id",
+        "description": "This route is responsible for deleted a post",
+        "tags": ["Posts"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Post Id",
+          "required": true
+        }],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Exists": {
+                    "value": {
+                      "message": "Post not exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Exists": {
+                    "value": {
+                      "message": "Post successfully deleted."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating": {
+      "post": {
+        "summary": "Create rating",
+        "description": "This route is responsible for creating a rating",
+        "tags": ["Rating"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rating"
+              },
+              "examples": {
+                "Rating": {
+                  "value": {
+                    "userName": "Kim",
+                    "rating": 3.5,
+                    "post": "481df913-4431-4195-b552-c97d49c78cf4"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Error Validator": {
+                    "value": [{
+                        "max": "rating must not be greater than 5",
+                        "min": "rating must not be less than 0",
+                        "isNumber": "rating must be a number conforming to the specified constraints"
+                      },
+                      {
+                        "isNotEmpty": "post should not be empty"
+                      }
+                    ]
+                  },
+                  "Exists": {
+                    "value": {
+                      "message": "User has already rated this post!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Post": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "PostWithRating": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "avaregeRating": {
+            "type": "string"
+          },
+          "rating": {
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Rating"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Rating": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "post": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

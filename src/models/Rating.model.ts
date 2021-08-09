@@ -31,9 +31,11 @@ export default class Rating {
   @IsNumber()
   @Min(0)
   @Max(5)
+  @IsNotEmpty()
   rating: number;
 
   @ManyToOne(Type => Post, post => post.rating)
+  @IsNotEmpty()
   post: Post;
 
   @CreateDateColumn({ name: 'created_At' })

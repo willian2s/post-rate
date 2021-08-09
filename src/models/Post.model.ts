@@ -17,6 +17,7 @@ export default class Post {
   @Column({
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   @IsString()
   @IsNotEmpty()
